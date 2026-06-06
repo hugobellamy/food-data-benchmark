@@ -1,0 +1,972 @@
+[
+  {
+    "prompt":"a bowl of homemade potato chips",
+    "components":[
+      {
+        "food_name":"Potato chips, homemade, fried in rapeseed oil",
+        "weight_g":45
+      }
+    ],
+    "calories":90.9,
+    "protein_g":1.6,
+    "fat_g":3.0,
+    "carbs_g":15.3,
+    "pred_calories":78.8,
+    "pred_protein_g":1.3,
+    "pred_fat_g":2.7,
+    "pred_carbs_g":13.2
+  },
+  {
+    "prompt":"a serving of pork and chicken chow mein",
+    "components":[
+      {
+        "food_name":"Chow mein, pork and chicken, homemade",
+        "weight_g":350
+      }
+    ],
+    "calories":252.0,
+    "protein_g":32.2,
+    "fat_g":6.6,
+    "carbs_g":20.3,
+    "pred_calories":571.6,
+    "pred_protein_g":37.3,
+    "pred_fat_g":24.8,
+    "pred_carbs_g":53.4
+  },
+  {
+    "prompt":"440g of Lamb, shoulder, whole, roasted, lean and fat, weighed with bone",
+    "components":[
+      {
+        "food_name":"Lamb, shoulder, whole, roasted, lean and fat, weighed with bone",
+        "weight_g":440
+      }
+    ],
+    "calories":1034.0,
+    "protein_g":85.8,
+    "fat_g":77.0,
+    "carbs_g":0.0,
+    "pred_calories":1034.0,
+    "pred_protein_g":85.8,
+    "pred_fat_g":77.0,
+    "pred_carbs_g":0.0
+  },
+  {
+    "prompt":"420g of Chicken, whole, corn-fed, raw, meat and skin, weighed with bone",
+    "components":[
+      {
+        "food_name":"Chicken, whole, corn-fed, raw, meat and skin, weighed with bone",
+        "weight_g":420
+      }
+    ],
+    "calories":596.4,
+    "protein_g":51.2,
+    "fat_g":43.3,
+    "carbs_g":0.0,
+    "pred_calories":844.2,
+    "pred_protein_g":80.2,
+    "pred_fat_g":58.0,
+    "pred_carbs_g":0.0
+  },
+  {
+    "prompt":"a portion of dry egg pasta",
+    "components":[
+      {
+        "food_name":"Pasta, egg, white, dried, raw",
+        "weight_g":85
+      }
+    ],
+    "calories":310.2,
+    "protein_g":11.0,
+    "fat_g":3.1,
+    "carbs_g":63.6,
+    "pred_calories":365.0,
+    "pred_protein_g":12.9,
+    "pred_fat_g":3.6,
+    "pred_carbs_g":74.8
+  },
+  {
+    "prompt":"420g of Beans, haricot, canned, re-heated, drained, 215g of Dill, fresh",
+    "components":[
+      {
+        "food_name":"Beans, haricot, canned, re-heated, drained",
+        "weight_g":420
+      },
+      {
+        "food_name":"Dill, fresh",
+        "weight_g":215
+      }
+    ],
+    "calories":457.0,
+    "protein_g":37.8,
+    "fat_g":5.9,
+    "carbs_g":67.5,
+    "pred_calories":457.0,
+    "pred_protein_g":37.8,
+    "pred_fat_g":5.9,
+    "pred_carbs_g":67.5
+  },
+  {
+    "prompt":"a grilled haddock fillet",
+    "components":[
+      {
+        "food_name":"Haddock, flesh only, grilled",
+        "weight_g":140
+      }
+    ],
+    "calories":137.2,
+    "protein_g":33.5,
+    "fat_g":0.4,
+    "carbs_g":0.0,
+    "pred_calories":147.9,
+    "pred_protein_g":35.7,
+    "pred_fat_g":0.5,
+    "pred_carbs_g":0.0
+  },
+  {
+    "prompt":"30g of Nut roast, homemade",
+    "components":[
+      {
+        "food_name":"Nut roast, homemade",
+        "weight_g":30
+      }
+    ],
+    "calories":100.5,
+    "protein_g":4.0,
+    "fat_g":7.0,
+    "carbs_g":5.6,
+    "pred_calories":100.5,
+    "pred_protein_g":4.0,
+    "pred_fat_g":7.0,
+    "pred_carbs_g":5.6
+  },
+  {
+    "prompt":"500g of Cake, Swiss rolls, chocolate covered and filled, retail",
+    "components":[
+      {
+        "food_name":"Cake, Swiss rolls, chocolate covered and filled, retail",
+        "weight_g":500
+      }
+    ],
+    "calories":2070.0,
+    "protein_g":22.5,
+    "fat_g":113.5,
+    "carbs_g":255.0,
+    "pred_calories":2070.0,
+    "pred_protein_g":22.5,
+    "pred_fat_g":113.5,
+    "pred_carbs_g":255.0
+  },
+  {
+    "prompt":"505g of Haddock, flesh only, smoked, steamed",
+    "components":[
+      {
+        "food_name":"Haddock, flesh only, smoked, steamed",
+        "weight_g":505
+      }
+    ],
+    "calories":479.8,
+    "protein_g":113.6,
+    "fat_g":2.5,
+    "carbs_g":0.0,
+    "pred_calories":479.8,
+    "pred_protein_g":113.6,
+    "pred_fat_g":2.5,
+    "pred_carbs_g":0.0
+  },
+  {
+    "prompt":"435g of Potato chips, fine cut, from fast food outlets",
+    "components":[
+      {
+        "food_name":"Potato chips, fine cut, from fast food outlets",
+        "weight_g":435
+      }
+    ],
+    "calories":1261.5,
+    "protein_g":15.2,
+    "fat_g":61.8,
+    "carbs_g":172.7,
+    "pred_calories":null,
+    "pred_protein_g":null,
+    "pred_fat_g":null,
+    "pred_carbs_g":null
+  },
+  {
+    "prompt":"a plate of lamb biryani",
+    "components":[
+      {
+        "food_name":"Curry, lamb biryani, homemade",
+        "weight_g":400
+      }
+    ],
+    "calories":780.0,
+    "protein_g":28.4,
+    "fat_g":36.8,
+    "carbs_g":83.6,
+    "pred_calories":838.6,
+    "pred_protein_g":45.0,
+    "pred_fat_g":40.1,
+    "pred_carbs_g":79.5
+  },
+  {
+    "prompt":"a few stalks of purple sprouting broccoli",
+    "components":[
+      {
+        "food_name":"Broccoli, purple sprouting, raw",
+        "weight_g":80
+      }
+    ],
+    "calories":28.0,
+    "protein_g":3.1,
+    "fat_g":0.9,
+    "carbs_g":2.1,
+    "pred_calories":26.2,
+    "pred_protein_g":2.9,
+    "pred_fat_g":0.8,
+    "pred_carbs_g":2.0
+  },
+  {
+    "prompt":"245g of Sardines, canned in sunflower oil, drained",
+    "components":[
+      {
+        "food_name":"Sardines, canned in sunflower oil, drained",
+        "weight_g":245
+      }
+    ],
+    "calories":539.0,
+    "protein_g":57.1,
+    "fat_g":34.5,
+    "carbs_g":0.0,
+    "pred_calories":539.0,
+    "pred_protein_g":57.1,
+    "pred_fat_g":34.5,
+    "pred_carbs_g":0.0
+  },
+  {
+    "prompt":"150g of Profiteroles with sauce, frozen, 95g of Prawns, standard, dried, 195g of Peas, mushy, canned, re-heated, 175g of Raspberries, raw",
+    "components":[
+      {
+        "food_name":"Profiteroles with sauce, frozen",
+        "weight_g":150
+      },
+      {
+        "food_name":"Prawns, standard, dried",
+        "weight_g":95
+      },
+      {
+        "food_name":"Peas, mushy, canned, re-heated",
+        "weight_g":195
+      },
+      {
+        "food_name":"Raspberries, raw",
+        "weight_g":175
+      }
+    ],
+    "calories":1078.8,
+    "protein_g":99.9,
+    "fat_g":45.1,
+    "carbs_g":72.7,
+    "pred_calories":null,
+    "pred_protein_g":null,
+    "pred_fat_g":null,
+    "pred_carbs_g":null
+  },
+  {
+    "prompt":"red mullet with potatoes and fresh coconut followed by jam tarts",
+    "components":[
+      {
+        "food_name":"Mullet, Red, flesh only, raw",
+        "weight_g":110
+      },
+      {
+        "food_name":"Potatoes, old, raw, flesh only",
+        "weight_g":200
+      },
+      {
+        "food_name":"Coconut, flesh only, fresh",
+        "weight_g":30
+      },
+      {
+        "food_name":"Jam tarts, retail",
+        "weight_g":60
+      }
+    ],
+    "calories":601.0,
+    "protein_g":27.2,
+    "fat_g":23.3,
+    "carbs_g":75.2,
+    "pred_calories":670.0,
+    "pred_protein_g":38.0,
+    "pred_fat_g":27.7,
+    "pred_carbs_g":71.9
+  },
+  {
+    "prompt":"lamb kheema with baby corn, scrambled eggs, and roasted duck",
+    "components":[
+      {
+        "food_name":"Kheema, lamb, homemade",
+        "weight_g":200
+      },
+      {
+        "food_name":"Sweetcorn, baby, boiled in unsalted water",
+        "weight_g":60
+      },
+      {
+        "food_name":"Eggs, chicken, scrambled, with semi-skimmed milk",
+        "weight_g":120
+      },
+      {
+        "food_name":"Duck, roasted, meat only, weighed with fat, skin and bone",
+        "weight_g":150
+      }
+    ],
+    "calories":720.5,
+    "protein_g":44.5,
+    "fat_g":55.9,
+    "carbs_g":11.6,
+    "pred_calories":1176.5,
+    "pred_protein_g":65.1,
+    "pred_fat_g":100.6,
+    "pred_carbs_g":3.0
+  },
+  {
+    "prompt":"145g of Lamb, chump steaks, raw, lean and fat",
+    "components":[
+      {
+        "food_name":"Lamb, chump steaks, raw, lean and fat",
+        "weight_g":145
+      }
+    ],
+    "calories":321.9,
+    "protein_g":27.0,
+    "fat_g":23.8,
+    "carbs_g":0.0,
+    "pred_calories":321.9,
+    "pred_protein_g":27.0,
+    "pred_fat_g":23.8,
+    "pred_carbs_g":0.0
+  },
+  {
+    "prompt":"485g of Duck, roasted, meat only",
+    "components":[
+      {
+        "food_name":"Duck, roasted, meat only",
+        "weight_g":485
+      }
+    ],
+    "calories":945.7,
+    "protein_g":122.7,
+    "fat_g":50.4,
+    "carbs_g":0.0,
+    "pred_calories":945.7,
+    "pred_protein_g":122.7,
+    "pred_fat_g":50.4,
+    "pred_carbs_g":0.0
+  },
+  {
+    "prompt":"a sprig of fresh parsley",
+    "components":[
+      {
+        "food_name":"Parsley, fresh",
+        "weight_g":5
+      }
+    ],
+    "calories":1.7,
+    "protein_g":0.2,
+    "fat_g":0.1,
+    "carbs_g":0.1,
+    "pred_calories":0.3,
+    "pred_protein_g":0.0,
+    "pred_fat_g":0.0,
+    "pred_carbs_g":0.0
+  },
+  {
+    "prompt":"335g of Beans, pigeon peas, dahl, dried, raw, 120g of Plaice, in batter, fried in blended oil",
+    "components":[
+      {
+        "food_name":"Beans, pigeon peas, dahl, dried, raw",
+        "weight_g":335
+      },
+      {
+        "food_name":"Plaice, in batter, fried in blended oil",
+        "weight_g":120
+      }
+    ],
+    "calories":1393.8,
+    "protein_g":91.3,
+    "fat_g":26.5,
+    "carbs_g":210.7,
+    "pred_calories":1393.8,
+    "pred_protein_g":91.3,
+    "pred_fat_g":26.5,
+    "pred_carbs_g":210.7
+  },
+  {
+    "prompt":"a handful of homemade chevda mix",
+    "components":[
+      {
+        "food_name":"Chevda\/chevra\/chewra, homemade",
+        "weight_g":50
+      }
+    ],
+    "calories":243.5,
+    "protein_g":9.3,
+    "fat_g":15.9,
+    "carbs_g":17.8,
+    "pred_calories":146.1,
+    "pred_protein_g":5.6,
+    "pred_fat_g":9.5,
+    "pred_carbs_g":10.7
+  },
+  {
+    "prompt":"a bowl of puffed wheat cereal",
+    "components":[
+      {
+        "food_name":"Breakfast cereal, puffed wheat, unfortified",
+        "weight_g":45
+      }
+    ],
+    "calories":153.5,
+    "protein_g":5.9,
+    "fat_g":0.9,
+    "carbs_g":32.4,
+    "pred_calories":268.4,
+    "pred_protein_g":11.7,
+    "pred_fat_g":8.6,
+    "pred_carbs_g":38.4
+  },
+  {
+    "prompt":"a side of fried onions",
+    "components":[
+      {
+        "food_name":"Onions, fried in corn oil",
+        "weight_g":80
+      }
+    ],
+    "calories":76.0,
+    "protein_g":1.0,
+    "fat_g":4.2,
+    "carbs_g":9.0,
+    "pred_calories":71.2,
+    "pred_protein_g":0.9,
+    "pred_fat_g":4.0,
+    "pred_carbs_g":8.4
+  },
+  {
+    "prompt":"325g of Chital, raw",
+    "components":[
+      {
+        "food_name":"Chital, raw",
+        "weight_g":325
+      }
+    ],
+    "calories":292.5,
+    "protein_g":58.8,
+    "fat_g":6.2,
+    "carbs_g":0.0,
+    "pred_calories":292.5,
+    "pred_protein_g":58.8,
+    "pred_fat_g":6.2,
+    "pred_carbs_g":0.0
+  },
+  {
+    "prompt":"360g of Tofu, soya bean, steamed, fried, 270g of Tuna, canned in brine, drained, 480g of Poussin, raw, meat and skin",
+    "components":[
+      {
+        "food_name":"Tofu, soya bean, steamed, fried",
+        "weight_g":360
+      },
+      {
+        "food_name":"Tuna, canned in brine, drained",
+        "weight_g":270
+      },
+      {
+        "food_name":"Poussin, raw, meat and skin",
+        "weight_g":480
+      }
+    ],
+    "calories":2203.5,
+    "protein_g":243.5,
+    "fat_g":133.1,
+    "carbs_g":7.2,
+    "pred_calories":2203.5,
+    "pred_protein_g":243.5,
+    "pred_fat_g":133.1,
+    "pred_carbs_g":7.2
+  },
+  {
+    "prompt":"490g of Complan powder, sweet, made up with whole milk, 225g of Peas, frozen, microwaved, 245g of Arrowroot, 115g of Almonds, toasted",
+    "components":[
+      {
+        "food_name":"Complan powder, sweet, made up with whole milk",
+        "weight_g":490
+      },
+      {
+        "food_name":"Peas, frozen, microwaved",
+        "weight_g":225
+      },
+      {
+        "food_name":"Arrowroot",
+        "weight_g":245
+      },
+      {
+        "food_name":"Almonds, toasted",
+        "weight_g":115
+      }
+    ],
+    "calories":2405.8,
+    "protein_g":67.8,
+    "fat_g":92.0,
+    "carbs_g":348.1,
+    "pred_calories":null,
+    "pred_protein_g":null,
+    "pred_fat_g":null,
+    "pred_carbs_g":null
+  },
+  {
+    "prompt":"a rack of lamb served with poached pangasius and a chocolate swiss roll for dessert",
+    "components":[
+      {
+        "food_name":"Lamb, rack of, raw, lean and fat, weighed with bone",
+        "weight_g":450
+      },
+      {
+        "food_name":"Pangasius, flesh only, poached",
+        "weight_g":140
+      },
+      {
+        "food_name":"Cake, Swiss rolls, chocolate covered and filled, retail",
+        "weight_g":65
+      }
+    ],
+    "calories":1329.9,
+    "protein_g":87.9,
+    "fat_g":94.8,
+    "carbs_g":33.1,
+    "pred_calories":1422.3,
+    "pred_protein_g":98.0,
+    "pred_fat_g":97.4,
+    "pred_carbs_g":40.8
+  },
+  {
+    "prompt":"400g of Chicken fricassee, reduced fat, homemade",
+    "components":[
+      {
+        "food_name":"Chicken fricassee, reduced fat, homemade",
+        "weight_g":400
+      }
+    ],
+    "calories":404.0,
+    "protein_g":40.8,
+    "fat_g":16.8,
+    "carbs_g":12.8,
+    "pred_calories":null,
+    "pred_protein_g":null,
+    "pred_fat_g":null,
+    "pred_carbs_g":null
+  },
+  {
+    "prompt":"475g of Dal Dhokari, homemade",
+    "components":[
+      {
+        "food_name":"Dal Dhokari, homemade",
+        "weight_g":475
+      }
+    ],
+    "calories":584.2,
+    "protein_g":26.6,
+    "fat_g":15.7,
+    "carbs_g":91.2,
+    "pred_calories":584.2,
+    "pred_protein_g":26.6,
+    "pred_fat_g":15.7,
+    "pred_carbs_g":91.2
+  },
+  {
+    "prompt":"335g of Muffins, American, not chocolate, retail",
+    "components":[
+      {
+        "food_name":"Muffins, American, not chocolate, retail",
+        "weight_g":335
+      }
+    ],
+    "calories":1256.2,
+    "protein_g":16.8,
+    "fat_g":65.3,
+    "carbs_g":160.1,
+    "pred_calories":1256.2,
+    "pred_protein_g":16.8,
+    "pred_fat_g":65.3,
+    "pred_carbs_g":160.1
+  },
+  {
+    "prompt":"110g of Chilli con carne, retail, reheated",
+    "components":[
+      {
+        "food_name":"Chilli con carne, retail, reheated",
+        "weight_g":110
+      }
+    ],
+    "calories":105.6,
+    "protein_g":8.5,
+    "fat_g":4.7,
+    "carbs_g":7.8,
+    "pred_calories":105.6,
+    "pred_protein_g":8.5,
+    "pred_fat_g":4.7,
+    "pred_carbs_g":7.8
+  },
+  {
+    "prompt":"two boiled egg yolks",
+    "components":[
+      {
+        "food_name":"Eggs, chicken, yolk, boiled",
+        "weight_g":36
+      }
+    ],
+    "calories":129.6,
+    "protein_g":6.0,
+    "fat_g":11.7,
+    "carbs_g":0.0,
+    "pred_calories":129.6,
+    "pred_protein_g":6.0,
+    "pred_fat_g":11.7,
+    "pred_carbs_g":0.0
+  },
+  {
+    "prompt":"a piece of raw calf liver",
+    "components":[
+      {
+        "food_name":"Liver, calf, raw",
+        "weight_g":150
+      }
+    ],
+    "calories":156.0,
+    "protein_g":27.5,
+    "fat_g":5.1,
+    "carbs_g":0.0,
+    "pred_calories":156.0,
+    "pred_protein_g":27.5,
+    "pred_fat_g":5.1,
+    "pred_carbs_g":0.0
+  },
+  {
+    "prompt":"a serving of canned carrots",
+    "components":[
+      {
+        "food_name":"Carrots, young, canned in water, re-heated, drained",
+        "weight_g":120
+      }
+    ],
+    "calories":24.0,
+    "protein_g":0.6,
+    "fat_g":0.4,
+    "carbs_g":5.0,
+    "pred_calories":20.0,
+    "pred_protein_g":0.5,
+    "pred_fat_g":0.3,
+    "pred_carbs_g":4.2
+  },
+  {
+    "prompt":"a slice of soda bread and a slice of wholemeal bread with a wedge of watermelon",
+    "components":[
+      {
+        "food_name":"Bread, soda, made with white flour, homemade",
+        "weight_g":45
+      },
+      {
+        "food_name":"Bread, wholemeal, average",
+        "weight_g":35
+      },
+      {
+        "food_name":"Melon, watermelon, flesh only, weighed whole",
+        "weight_g":350
+      }
+    ],
+    "calories":256.4,
+    "protein_g":7.8,
+    "fat_g":2.3,
+    "carbs_g":54.5,
+    "pred_calories":294.8,
+    "pred_protein_g":8.8,
+    "pred_fat_g":2.5,
+    "pred_carbs_g":63.2
+  },
+  {
+    "prompt":"265g of Bacon, fat only, average, raw, 405g of Turkey, meat, average, roasted, 30g of Creme fraiche, full fat",
+    "components":[
+      {
+        "food_name":"Bacon, fat only, average, raw",
+        "weight_g":265
+      },
+      {
+        "food_name":"Turkey, meat, average, roasted",
+        "weight_g":405
+      },
+      {
+        "food_name":"Creme fraiche, full fat",
+        "weight_g":30
+      }
+    ],
+    "calories":2765.2,
+    "protein_g":139.7,
+    "fat_g":245.0,
+    "carbs_g":0.7,
+    "pred_calories":2765.2,
+    "pred_protein_g":139.7,
+    "pred_fat_g":245.0,
+    "pred_carbs_g":0.7
+  },
+  {
+    "prompt":"a greek salad served with a fried red snapper",
+    "components":[
+      {
+        "food_name":"Salad, Greek",
+        "weight_g":200
+      },
+      {
+        "food_name":"Red snapper, flesh only, fried in blended oil, weighed with bones and skin",
+        "weight_g":300
+      }
+    ],
+    "calories":454.0,
+    "protein_g":42.9,
+    "fat_g":30.0,
+    "carbs_g":3.8,
+    "pred_calories":null,
+    "pred_protein_g":null,
+    "pred_fat_g":null,
+    "pred_carbs_g":null
+  },
+  {
+    "prompt":"305g of Duck, roasted, meat, fat and skin",
+    "components":[
+      {
+        "food_name":"Duck, roasted, meat, fat and skin",
+        "weight_g":305
+      }
+    ],
+    "calories":1290.1,
+    "protein_g":61.0,
+    "fat_g":116.2,
+    "carbs_g":0.0,
+    "pred_calories":1290.1,
+    "pred_protein_g":61.0,
+    "pred_fat_g":116.2,
+    "pred_carbs_g":0.0
+  },
+  {
+    "prompt":"a portion of pot-roasted pork shoulder",
+    "components":[
+      {
+        "food_name":"Pork, shoulder joint (collar), pot-roasted, lean",
+        "weight_g":160
+      }
+    ],
+    "calories":321.6,
+    "protein_g":48.0,
+    "fat_g":14.4,
+    "carbs_g":0.0,
+    "pred_calories":402.0,
+    "pred_protein_g":60.0,
+    "pred_fat_g":18.0,
+    "pred_carbs_g":0.0
+  },
+  {
+    "prompt":"335g of Melon, Galia, flesh only, weighed with skin, 275g of Milk, flavoured, pasteurised, strawberry, banana, 330g of Apple sauce, homemade, 455g of Rhubarb, stems only, stewed with sugar",
+    "components":[
+      {
+        "food_name":"Melon, Galia, flesh only, weighed with skin",
+        "weight_g":335
+      },
+      {
+        "food_name":"Milk, flavoured, pasteurised, strawberry, banana",
+        "weight_g":275
+      },
+      {
+        "food_name":"Apple sauce, homemade",
+        "weight_g":330
+      },
+      {
+        "food_name":"Rhubarb, stems only, stewed with sugar",
+        "weight_g":455
+      }
+    ],
+    "calories":708.7,
+    "protein_g":16.0,
+    "fat_g":5.6,
+    "carbs_g":158.1,
+    "pred_calories":null,
+    "pred_protein_g":null,
+    "pred_fat_g":null,
+    "pred_carbs_g":null
+  },
+  {
+    "prompt":"boiled courgettes with a side of spinach and potato curry and apple crumble for dessert",
+    "components":[
+      {
+        "food_name":"Courgette, boiled in unsalted water",
+        "weight_g":90
+      },
+      {
+        "food_name":"Curry, spinach and potato, masala, homemade",
+        "weight_g":250
+      },
+      {
+        "food_name":"Crumble, apple, homemade",
+        "weight_g":180
+      }
+    ],
+    "calories":650.3,
+    "protein_g":9.7,
+    "fat_g":32.3,
+    "carbs_g":83.1,
+    "pred_calories":599.0,
+    "pred_protein_g":10.0,
+    "pred_fat_g":30.6,
+    "pred_carbs_g":73.7
+  },
+  {
+    "prompt":"70g of Beanburger, butter bean, fried in rapeseed oil, homemade",
+    "components":[
+      {
+        "food_name":"Beanburger, butter bean, fried in rapeseed oil, homemade",
+        "weight_g":70
+      }
+    ],
+    "calories":135.8,
+    "protein_g":4.0,
+    "fat_g":7.4,
+    "carbs_g":14.1,
+    "pred_calories":118.5,
+    "pred_protein_g":5.7,
+    "pred_fat_g":5.8,
+    "pred_carbs_g":11.8
+  },
+  {
+    "prompt":"295g of Cod, flesh only, poached in milk, butter and salt added, 405g of Currant buns, toasted, 420g of Breakfast cereal, wheat biscuits, Weetabix type, fortified",
+    "components":[
+      {
+        "food_name":"Cod, flesh only, poached in milk, butter and salt added",
+        "weight_g":295
+      },
+      {
+        "food_name":"Currant buns, toasted",
+        "weight_g":405
+      },
+      {
+        "food_name":"Breakfast cereal, wheat biscuits, Weetabix type, fortified",
+        "weight_g":420
+      }
+    ],
+    "calories":2931.2,
+    "protein_g":141.8,
+    "fat_g":36.3,
+    "carbs_g":541.9,
+    "pred_calories":null,
+    "pred_protein_g":null,
+    "pred_fat_g":null,
+    "pred_carbs_g":null
+  },
+  {
+    "prompt":"240g of Sultanas",
+    "components":[
+      {
+        "food_name":"Sultanas",
+        "weight_g":240
+      }
+    ],
+    "calories":660.0,
+    "protein_g":6.5,
+    "fat_g":1.0,
+    "carbs_g":166.6,
+    "pred_calories":660.0,
+    "pred_protein_g":6.5,
+    "pred_fat_g":1.0,
+    "pred_carbs_g":166.6
+  },
+  {
+    "prompt":"505g of Mayonnaise, standard, retail",
+    "components":[
+      {
+        "food_name":"Mayonnaise, standard, retail",
+        "weight_g":505
+      }
+    ],
+    "calories":3464.3,
+    "protein_g":5.6,
+    "fat_g":377.7,
+    "carbs_g":12.1,
+    "pred_calories":3464.3,
+    "pred_protein_g":5.6,
+    "pred_fat_g":377.7,
+    "pred_carbs_g":12.1
+  },
+  {
+    "prompt":"170g of Bhaji, vegetable, Punjabi, with vegetable oil",
+    "components":[
+      {
+        "food_name":"Bhaji, vegetable, Punjabi, with vegetable oil",
+        "weight_g":170
+      }
+    ],
+    "calories":204.0,
+    "protein_g":6.0,
+    "fat_g":14.6,
+    "carbs_g":13.9,
+    "pred_calories":null,
+    "pred_protein_g":null,
+    "pred_fat_g":null,
+    "pred_carbs_g":null
+  },
+  {
+    "prompt":"230g of Stew, Irish, made with lean lamb, homemade",
+    "components":[
+      {
+        "food_name":"Stew, Irish, made with lean lamb, homemade",
+        "weight_g":230
+      }
+    ],
+    "calories":246.1,
+    "protein_g":17.5,
+    "fat_g":11.3,
+    "carbs_g":19.8,
+    "pred_calories":246.1,
+    "pred_protein_g":17.5,
+    "pred_fat_g":11.3,
+    "pred_carbs_g":19.8
+  },
+  {
+    "prompt":"a mug of Horlicks made with skimmed milk",
+    "components":[
+      {
+        "food_name":"Horlicks powder, made up with skimmed milk",
+        "weight_g":280
+      }
+    ],
+    "calories":201.6,
+    "protein_g":11.5,
+    "fat_g":1.7,
+    "carbs_g":37.8,
+    "pred_calories":196.2,
+    "pred_protein_g":11.3,
+    "pred_fat_g":1.2,
+    "pred_carbs_g":37.4
+  },
+  {
+    "prompt":"a whole yellow bell pepper",
+    "components":[
+      {
+        "food_name":"Pepper, capsicum, yellow, raw",
+        "weight_g":160
+      }
+    ],
+    "calories":36.8,
+    "protein_g":1.3,
+    "fat_g":0.3,
+    "carbs_g":7.4,
+    "pred_calories":41.4,
+    "pred_protein_g":1.4,
+    "pred_fat_g":0.4,
+    "pred_carbs_g":8.3
+  }
+]

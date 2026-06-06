@@ -40,6 +40,9 @@ DATA = Path("data")
 SRC = DATA / "source" / "McCance_Widdowsons_Composition_of_Foods_Integrated_Dataset_2021..xlsx"
 LOOKUP_CSV = DATA / "foods_lookup.csv"
 COLS = ["calories", "protein_g", "fat_g", "carbs_g"]
+# Generous cap so reasoning models (which spend tokens thinking before answering)
+# still reach the JSON answer. _chat_json doubles this on a truncation retry.
+MAX_TOKENS = 4096
 
 # Same column mapping the dataset's ground truth was built from (01_build_datasets),
 # so oracle search resolves to the very rows that produced the labels.
@@ -112,59 +115,173 @@ def predict_oracle(db: FoodDB, item: dict) -> dict:
     return sum_components(db, comps)
 
 
-# ------------------------------------------------------------------- llm mode
-STAGE1_SYSTEM = (
-    "You are a food expert. Break the described meal into its component foods and "
-    "estimate each component's weight in grams as actually eaten. Return ONLY a "
-    'JSON array of objects: [{"food": "<short food name>", "grams": <number>}]. '
-    "Use one object per ingredient; a single-item meal returns an array of length 1."
+# -------------------------------------------------------------- estimate mode
+# The "without tool" baseline: the model guesses macros directly (same prompt as
+# 02_benchmark.ipynb), no database. Lets us compare with-tool vs without-tool for
+# the same model on the same items.
+ESTIMATE_SYSTEM = (
+    "You are a nutrition expert. Given a food description, estimate the total "
+    "nutritional content.\n\nReturn ONLY a JSON object with these keys:\n"
+    '- "calories": total kcal (number)\n- "protein_g": grams of protein (number)\n'
+    '- "fat_g": grams of fat (number)\n- "carbs_g": grams of carbohydrates (number)\n\n'
+    "Be as accurate as possible. Do not explain, just return the JSON."
 )
 
 
-def _stage1(client, model: str, prompt: str) -> list[dict]:
-    resp = client.chat.completions.create(
-        model=model, temperature=0,
-        messages=[{"role": "system", "content": STAGE1_SYSTEM},
-                  {"role": "user", "content": prompt}],
-    )
-    text = (resp.choices[0].message.content or "").strip()
-    if text.startswith("```"):
-        text = text.split("\n", 1)[1].rsplit("```", 1)[0].strip()
-    data = json.loads(text)
-    return [{"food": str(d["food"]), "grams": float(d["grams"])} for d in data]
-
-
-def _stage2_pick(client, model: str, food: str, candidates: list[dict]) -> dict:
-    """Ask the model which candidate row best matches `food`. Fall back to top-1."""
-    if not candidates:
-        return None
-    listing = "\n".join(f"{i}: {c['food_name']}" for i, c in enumerate(candidates))
-    resp = client.chat.completions.create(
-        model=model, temperature=0,
-        messages=[{"role": "user", "content": (
-            f'Which database entry best matches the food "{food}"? Reply with ONLY '
-            f'the integer index (0-based). If none fit, reply 0.\n{listing}')}],
-    )
-    text = (resp.choices[0].message.content or "").strip()
-    digits = "".join(ch for ch in text if ch.isdigit())
-    idx = int(digits) if digits else 0
-    return candidates[min(idx, len(candidates) - 1)]
-
-
-def predict_llm(client, model: str, db: FoodDB, item: dict) -> dict:
+def predict_estimate(client, model: str, db: FoodDB, item: dict) -> dict:
     try:
-        comps_in = _stage1(client, model, item["prompt"])
-    except Exception as e:  # noqa: BLE001 — record failures as empty prediction
-        print(f"stage1 fail '{item['prompt'][:40]}': {e}")
+        resp = client.chat.completions.create(
+            model=model, temperature=0, max_tokens=MAX_TOKENS,
+            messages=[{"role": "system", "content": ESTIMATE_SYSTEM},
+                      {"role": "user", "content": item["prompt"]}],
+        )
+        text = (resp.choices[0].message.content or "").strip()
+        if text.startswith("```"):
+            text = text.split("\n", 1)[1].rsplit("```", 1)[0].strip()
+        d = json.loads(text)
+        return {c: float(d[c]) for c in COLS}
+    except Exception as e:  # noqa: BLE001
+        print(f"estimate fail '{item['prompt'][:40]}': {e}")
         return {c: None for c in COLS}
-    comps = []
-    for comp in comps_in:
-        cands = db.search(comp["food"], limit=10)
+
+
+# ------------------------------------------------------------------- llm mode
+# Faithful automation of the agent's calorie-counting loop, in exactly TWO LLM
+# calls regardless of ingredient count:
+#   call 1 — meal description -> list of database search terms
+#   (tool)  -> fuzzy-search each term, collect candidate rows
+#   call 2 — given every term's candidates, pick the entry index AND the weight
+#            for each (weight conditioned on the chosen entry's basis)
+#   sum    -> chosen rows scaled by grams
+SEARCH_TERMS_SYSTEM = (
+    "You are counting the calories of a meal using a food-composition database. "
+    "Break the meal into its component foods and give the search term you would "
+    "look each one up by. Return ONLY a JSON array of short search strings, one "
+    'per distinct ingredient, e.g. ["chicken breast", "basmati rice"]. A '
+    "single-item meal returns one term."
+)
+PICK_SYSTEM = (
+    "You are counting the calories of a meal using a food-composition database. "
+    "For each food you searched, you are shown the candidate database entries "
+    "(with kcal per 100 g). For each food, in order, choose the entry that best "
+    "matches what was actually eaten and estimate the weight eaten in grams.\n"
+    "- Match the FORM eaten: canned vs dried, boiled vs raw, with/without skin.\n"
+    "- The weight must match that entry's basis (e.g. a 'boiled' entry takes the "
+    "cooked weight; a 'dried/raw' entry takes the dry weight).\n"
+    'Return ONLY a JSON array with one object per food, in order: '
+    '[{"index": <int>, "grams": <number>}].'
+)
+
+
+def _extract_json(text: str):
+    """Parse JSON from a model reply that may be fenced or wrapped in prose.
+
+    Tries a direct parse, then strips ``` fences, then scans for the first
+    balanced [...] / {...} block (ignoring brackets inside strings). Raises
+    ValueError if nothing parses — including silently-truncated replies."""
+    text = (text or "").strip()
+    if not text:
+        raise ValueError("empty reply")
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        pass
+    if text.startswith("```"):
+        inner = text.split("\n", 1)[1].rsplit("```", 1)[0].strip() if "\n" in text else text
         try:
-            chosen = _stage2_pick(client, model, comp["food"], cands)
-        except Exception:  # noqa: BLE001
-            chosen = cands[0] if cands else None
-        comps.append((comp["food"], comp["grams"], chosen))
+            return json.loads(inner)
+        except json.JSONDecodeError:
+            text = inner
+    for open_ch, close_ch in (("[", "]"), ("{", "}")):
+        start = text.find(open_ch)
+        if start < 0:
+            continue
+        depth, in_str, esc = 0, False, False
+        for i in range(start, len(text)):
+            ch = text[i]
+            if in_str:
+                esc = (ch == "\\") and not esc
+                if ch == '"' and not esc:
+                    in_str = False
+            elif ch == '"':
+                in_str = True
+            elif ch == open_ch:
+                depth += 1
+            elif ch == close_ch:
+                depth -= 1
+                if depth == 0:
+                    return json.loads(text[start:i + 1])
+    raise ValueError("no parseable JSON (possibly truncated)")
+
+
+def _chat_json(client, model: str, system: str, user: str, retries: int = 2):
+    """Chat call returning parsed JSON, retrying with more tokens on truncation."""
+    last = None
+    for attempt in range(retries + 1):
+        budget = MAX_TOKENS * (2 if attempt else 1)
+        resp = client.chat.completions.create(
+            model=model, temperature=0, max_tokens=budget,
+            messages=[{"role": "system", "content": system},
+                      {"role": "user", "content": user}],
+        )
+        content = resp.choices[0].message.content
+        try:
+            return _extract_json(content)
+        except (ValueError, json.JSONDecodeError) as e:
+            last = e
+            fin = resp.choices[0].finish_reason
+            print(f"  parse retry {attempt} (finish={fin}): {repr(content)[:80]}")
+    raise last
+
+
+def _search_terms(client, model: str, prompt: str) -> list[str]:
+    data = _chat_json(client, model, SEARCH_TERMS_SYSTEM, prompt)
+    return [str(t) for t in data if str(t).strip()]
+
+
+def _pick_entries(client, model: str, prompt: str,
+                  term_cands: list[tuple[str, list[dict]]]) -> list[dict]:
+    """One call: for every (term, candidates), return {index, grams}."""
+    blocks = []
+    for i, (term, cands) in enumerate(term_cands):
+        lines = [f'Food {i} — "{term}":']
+        for j, c in enumerate(cands):
+            lines.append(f"  {j}: {c['food_name']} ({c['calories']:.0f} kcal/100g)")
+        blocks.append("\n".join(lines))
+    user = (f"Meal: {prompt}\n\n" + "\n\n".join(blocks)
+            + f"\n\nReturn a JSON array of {len(term_cands)} objects "
+              '[{"index", "grams"}], one per food in order.')
+    data = _chat_json(client, model, PICK_SYSTEM, user)
+    return data if isinstance(data, list) else [data]
+
+
+def predict_llm(client, model: str, db: FoodDB, item: dict,
+                cand_k: int = 8, **_ignored) -> dict:
+    """Two-call agent workflow: search-terms -> tool search -> pick index+weight -> sum."""
+    try:
+        terms = _search_terms(client, model, item["prompt"])
+    except Exception as e:  # noqa: BLE001
+        print(f"search-terms fail '{item['prompt'][:40]}': {e}")
+        return {c: None for c in COLS}
+    term_cands = [(t, db.search(t, limit=cand_k)) for t in terms]
+    term_cands = [(t, c) for t, c in term_cands if c]  # drop terms with no hits
+    if not term_cands:
+        return {c: 0.0 for c in COLS}
+    try:
+        picks = _pick_entries(client, model, item["prompt"], term_cands)
+    except Exception as e:  # noqa: BLE001
+        print(f"pick fail '{item['prompt'][:40]}': {e}")
+        return {c: None for c in COLS}
+
+    comps = []
+    for (term, cands), pick in zip(term_cands, picks):
+        try:
+            idx = int(pick["index"])
+            grams = float(pick["grams"])
+        except (TypeError, ValueError, KeyError):
+            idx, grams = 0, 0.0
+        rec = cands[min(max(idx, 0), len(cands) - 1)]
+        comps.append((term, grams, rec))
     return sum_components(db, comps)
 
 
@@ -172,11 +289,15 @@ def predict_llm(client, model: str, db: FoodDB, item: dict) -> dict:
 def main():
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--mode", choices=["oracle", "llm"], required=True)
+    ap.add_argument("--mode", choices=["oracle", "llm", "estimate"], required=True,
+                    help="oracle=ceiling; llm=with tool; estimate=without tool")
     ap.add_argument("--model", default="google/gemini-2.0-flash-001")
+    ap.add_argument("--base-url", default="https://openrouter.ai/api/v1",
+                    help="OpenAI-compatible endpoint (e.g. a local LM Studio server)")
     ap.add_argument("--tag", help="results filename stem (data/results/<tag>.json)")
     ap.add_argument("--n", type=int, default=0, help="limit to first N items (0 = all)")
     ap.add_argument("--workers", type=int, default=8)
+    ap.add_argument("--timeout", type=float, default=600, help="per-request timeout (s)")
     args = ap.parse_args()
 
     ds = pd.read_json(DATA / "benchmark.json")
@@ -191,12 +312,18 @@ def main():
             preds[i] = predict_oracle(db, item)
     else:
         from openai import OpenAI
-        client = OpenAI(base_url="https://openrouter.ai/api/v1",
-                        api_key=os.environ["OPENROUTER_API_KEY"])
+        # Local OpenAI-compatible servers (LM Studio etc.) need no real key.
+        api_key = os.environ.get("OPENROUTER_API_KEY") or "not-needed"
+        client = OpenAI(base_url=args.base_url, api_key=api_key, timeout=args.timeout)
+        if args.mode == "estimate":
+            def predict(it):
+                return predict_estimate(client, args.model, db, it)
+        else:
+            def predict(it):
+                return predict_llm(client, args.model, db, it)
         with tqdm(total=len(items), desc=args.model.split("/")[-1]) as bar:
             with ThreadPoolExecutor(max_workers=args.workers) as ex:
-                futs = {ex.submit(predict_llm, client, args.model, db, it): i
-                        for i, it in enumerate(items)}
+                futs = {ex.submit(predict, it): i for i, it in enumerate(items)}
                 for fut in as_completed(futs):
                     preds[futs[fut]] = fut.result()
                     bar.update(1)
@@ -204,8 +331,10 @@ def main():
     preds_df = pd.DataFrame(preds).rename(columns={c: f"pred_{c}" for c in COLS})
     out = pd.concat([ds.reset_index(drop=True), preds_df], axis=1)
 
-    tag = args.tag or (f"db-grounded-{args.mode}" if args.mode == "oracle"
-                       else f"db-grounded-{args.model.split('/')[-1]}")
+    slug = args.model.split("/")[-1]
+    default_tag = {"oracle": "db-grounded-oracle", "estimate": f"estimate-{slug}",
+                   "llm": f"db-grounded-{slug}"}[args.mode]
+    tag = args.tag or default_tag
     (DATA / "results").mkdir(exist_ok=True)
     out_path = DATA / "results" / f"{tag}.json"
     out.to_json(out_path, orient="records", indent=2)

@@ -47,42 +47,56 @@ R² scores (higher is better). "Soft" = natural language prompts ("an apple"), "
 
 The tables above measure models *estimating* macros directly. The
 [meal-plan-skill](https://github.com/hugobellamy/meal-plan-skill/) instead uses a
-**database-grounded** technique: the model decomposes a meal into components and
-weights, fuzzy-searches the McCance database for each, picks the best-matching
-row, and the macros are **summed from the real per-100g rows** — the model never
-produces a nutrition number itself. Run it with `04_db_grounded.py`:
+**database-grounded** technique that mirrors an agent counting calories with a
+search tool, in two LLM calls:
+
+1. **search terms** — the model turns the meal into database search terms;
+2. **(tool)** — each term is fuzzy-searched in McCance for candidate rows;
+3. **pick + weigh** — shown every term's candidates (with kcal/100g), the model
+   picks the matching entry *and* the weight for each, choosing the form actually
+   eaten (canned vs dried, boiled vs raw) and weighing on that entry's basis;
+4. **sum** — the macros are summed from the chosen per-100g rows. The model never
+   produces a nutrition number itself.
+
+`04_db_grounded.py` runs it in three modes:
 
 ```bash
-uv run 04_db_grounded.py --mode oracle                 # no API key; the ceiling
-uv run 04_db_grounded.py --mode llm --model google/gemini-2.0-flash-001 --n 200
+uv run 04_db_grounded.py --mode oracle                     # ceiling, no API key
+uv run 04_db_grounded.py --mode estimate --model M --n 50  # without tool (direct guess)
+uv run 04_db_grounded.py --mode llm      --model M --n 50  # with tool (2-call workflow)
+# local OpenAI-compatible server (e.g. LM Studio):
+uv run 04_db_grounded.py --mode llm --base-url http://HOST:1234/v1 --model google/gemma-4-31b --n 50
 ```
 
-Results land in `data/results/db-grounded-*.json` and are scored by
+Results land in `data/results/{estimate,db-grounded}-*.json` and are scored by
 `03_analysis.ipynb` alongside the estimate-only models.
 
-> ⚠️ **These numbers are optimistic — the test set is generated from the same
-> database the technique looks up in.** Each benchmark item's ground-truth macros
-> are computed by summing McCance rows for its labelled components (see
-> `01_build_datasets.ipynb`), so the "correct answer" for every item literally
-> lives in the lookup table the technique searches. In real use the food eaten
-> often has no exact McCance row (brand products, restaurant dishes, personal
-> recipes), and portion estimation — the largest error source — still falls to
-> the model. Treat the database-grounded scores as an **upper bound**, not a
-> like-for-like field accuracy. The `oracle` mode (perfect decomposition, then
-> search+sum) quantifies that ceiling; the `llm` mode is the fairer comparison
-> against the estimate-only models, since it sees only the natural-language prompt.
+### Results — with tool vs without, same 50 items (mean R²)
 
-### Results
+| Model | Without tool | With tool | Δ | N |
+|:------|-----------:|---------:|------:|--:|
+| gemma-4-31b (local) | 0.937 | **0.985** | +0.048 | 42 |
+| gemini-3.5-flash | 0.948 | **0.984** | +0.036 | 50 |
+| claude-sonnet-4.6 | 0.825 | **0.987** | +0.162 | 50 |
+| claude-haiku-4.5 | 0.776 | **0.923** | +0.146 | 50 |
+| qwen3-235b-a22b-2507 | 0.736 | **0.985** | +0.248 | 49 |
+| `oracle` (perfect decomposition, no LLM) | — | **0.9998** | — | 50 |
 
-| Technique | Calories | Protein | Fat | Carbs | Mean R² |
-|:----------|---------:|--------:|----:|------:|--------:|
-| `oracle` — ceiling, no LLM (search+sum) | 0.9999 | 0.9993 | 1.0000 | 1.0000 | **0.9998** |
-| `llm` — decompose→search→pick→sum | _run with a key_ | | | | |
+**The tool helps every model, most where the model is weakest** (qwen +0.25,
+sonnet +0.16, haiku +0.15). Without it the models spread from 0.74 to 0.95; with
+it they converge to ~0.92–0.99 — the database equalizes nutrition knowledge, so a
+cheap model with the tool matches an expensive one. (N<50 where a model failed to
+return parseable JSON on a few items — gemma-4 on a small local context window,
+qwen on one; those items are dropped from *both* columns so each row stays
+like-for-like.)
 
-The `oracle` row is **~1.0 by construction** — given the correct food names and
-weights, searching McCance returns the very rows the labels were summed from. It
-is not a measure of real accuracy; it is a measurement of the leakage itself, and
-the reason these scores can't be compared head-to-head with the estimate-only
-models above. The `llm` row (which sees only the natural-language prompt) is the
-fair comparison and will be lower — fill it in by running `--mode llm`.
-
+> ⚠️ **Absolute with-tool scores are optimistic — the test set is generated from
+> the same database the technique looks up in.** Each item's ground-truth macros
+> are summed McCance rows for its labelled components (`01_build_datasets.ipynb`),
+> so the "correct answer" lives in the lookup table the technique searches. The
+> `oracle` row (0.9998) measures that leakage directly: with perfect names and
+> weights, search+sum just returns the label rows. In real use the eaten food
+> often has no exact McCance row (brands, restaurant dishes, recipes). So read the
+> absolute with-tool numbers as an **upper bound** — but the **Δ within each model**
+> is a controlled experiment (same items, same model, tool vs no tool) and is
+> consistently, substantially positive.

@@ -42,3 +42,47 @@ R² scores (higher is better). "Soft" = natural language prompts ("an apple"), "
 | claude-sonnet-4.6      |     0.8293 |    0.8227 | 0.834  |  0.7821 |    0.817  |
 | qwen3-235b-a22b-2507   |     0.7051 |    0.6685 | 0.6905 |  0.6015 |    0.6664 |
 | claude-haiku-4.5       |     0.5914 |    0.6453 | 0.7493 |  0.6663 |    0.6631 |
+
+## Database-grounded technique
+
+The tables above measure models *estimating* macros directly. The
+[meal-plan-skill](https://github.com/hugobellamy/meal-plan-skill/) instead uses a
+**database-grounded** technique: the model decomposes a meal into components and
+weights, fuzzy-searches the McCance database for each, picks the best-matching
+row, and the macros are **summed from the real per-100g rows** — the model never
+produces a nutrition number itself. Run it with `04_db_grounded.py`:
+
+```bash
+uv run 04_db_grounded.py --mode oracle                 # no API key; the ceiling
+uv run 04_db_grounded.py --mode llm --model google/gemini-2.0-flash-001 --n 200
+```
+
+Results land in `data/results/db-grounded-*.json` and are scored by
+`03_analysis.ipynb` alongside the estimate-only models.
+
+> ⚠️ **These numbers are optimistic — the test set is generated from the same
+> database the technique looks up in.** Each benchmark item's ground-truth macros
+> are computed by summing McCance rows for its labelled components (see
+> `01_build_datasets.ipynb`), so the "correct answer" for every item literally
+> lives in the lookup table the technique searches. In real use the food eaten
+> often has no exact McCance row (brand products, restaurant dishes, personal
+> recipes), and portion estimation — the largest error source — still falls to
+> the model. Treat the database-grounded scores as an **upper bound**, not a
+> like-for-like field accuracy. The `oracle` mode (perfect decomposition, then
+> search+sum) quantifies that ceiling; the `llm` mode is the fairer comparison
+> against the estimate-only models, since it sees only the natural-language prompt.
+
+### Results
+
+| Technique | Calories | Protein | Fat | Carbs | Mean R² |
+|:----------|---------:|--------:|----:|------:|--------:|
+| `oracle` — ceiling, no LLM (search+sum) | 0.9999 | 0.9993 | 1.0000 | 1.0000 | **0.9998** |
+| `llm` — decompose→search→pick→sum | _run with a key_ | | | | |
+
+The `oracle` row is **~1.0 by construction** — given the correct food names and
+weights, searching McCance returns the very rows the labels were summed from. It
+is not a measure of real accuracy; it is a measurement of the leakage itself, and
+the reason these scores can't be compared head-to-head with the estimate-only
+models above. The `llm` row (which sees only the natural-language prompt) is the
+fair comparison and will be lower — fill it in by running `--mode llm`.
+
